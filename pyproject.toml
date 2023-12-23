@@ -1,20 +1,21 @@
 [tool.poetry]
-name = "harlequin_myadapter"
+name = "harlequin_trino"
 version = "0.1.0"
-description = "A Harlequin adapter for <my favorite database>."
-authors = ["Ted Conbeer <tconbeer@users.noreply.github.com>"]
+description = "A Harlequin adapter for Trino."
+authors = ["Tyler Hillery <TylerHillery@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
 packages = [
-    { include = "harlequin_myadapter", from = "src" },
+    { include = "harlequin_trino", from = "src" },
 ]
 
 [tool.poetry.plugins."harlequin.adapter"]
-my-adapter = "harlequin_myadapter:MyAdapter"
+trino = "harlequin_trino:HarlequinTrinoAdapter"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
 harlequin = "^1.7"
+trino = "^0.327.0"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"

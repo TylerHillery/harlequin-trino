@@ -1,0 +1,406 @@
+Name	Description	Introduced	Deprecated
+abs()	Absolute value		
+acos()	Arc cosine		
+all_match()	Returns true if all elements of the array match the given predicate		
+any_match()	Returns true if the array contains one or more elements that match the given predicate		
+any_value()	Return an arbitrary non-null input value		
+any_value()	Return an arbitrary non-null input value		
+approx_distinct()			
+approx_most_frequent()			
+approx_percentile()			
+approx_set()			
+arbitrary()	Return an arbitrary non-null input value		
+array_agg()	return an array of values		
+array_distinct()	Remove duplicate values from the given array		
+array_except()	Returns an array of elements that are in the first array but not the second, without duplicates.		
+array_histogram()	Return a map containing the counts of the elements in the array		
+array_intersect()	Intersects elements of the two given arrays		
+array_join()	Concatenates the elements of the given array using a delimiter and an optional string to replace nulls		
+array_max()	Get maximum value of array		
+array_min()	Get minimum value of array		
+array_position()	Returns the position of the first occurrence of the given value in array (or 0 if not found)		
+array_remove()	Remove specified values from the given array		
+array_sort()	Sorts the given array in ascending order according to the natural ordering of its elements.		
+array_union()	Union elements of the two given arrays		
+arrays_overlap()	Returns true if arrays have common elements		
+asin()	Arc sine		
+at_timezone()			
+atan()	Arc tangent		
+atan2()	Arc tangent of given fraction		
+avg()	Calculates the average value		
+bar()			
+beta_cdf()	Beta cdf given the a, b parameters and value		
+bing_tile()	Creates a Bing tile from XY coordinates and zoom level		
+bing_tile_at()	Given a (latitude, longitude) point, returns the containing Bing tile at the specified zoom level		
+bing_tile_coordinates()	Given a Bing tile, returns XY coordinates of the tile		
+bing_tile_polygon()	Given a Bing tile, returns the polygon representation of the tile		
+bing_tile_quadkey()	Given a Bing tile, returns its QuadKey		
+bing_tile_zoom_level()	Given a Bing tile, returns zoom level of the tile		
+bing_tiles_around()	Given a (longitude, latitude) point, returns the surrounding Bing tiles at the specified zoom level		
+bit_count()	Count number of set bits in 2's complement representation		
+bitwise_and()	Bitwise AND in 2's complement arithmetic		
+bitwise_and_agg()			
+bitwise_left_shift()	bitwise left shift		
+bitwise_not()	Bitwise NOT in 2's complement arithmetic		
+bitwise_or()	Bitwise OR in 2's complement arithmetic		
+bitwise_or_agg()			
+bitwise_right_shift()	bitwise logical right shift		
+bitwise_right_shift_arithmetic()	bitwise arithmetic right shift		
+bitwise_xor()	Bitwise XOR in 2's complement arithmetic		
+bool_and()			
+bool_or()			
+cardinality()	Returns the cardinality (length) of the array		
+cbrt()	Cube root		
+ceil()	Round up to nearest integer		
+ceiling()	Round up to nearest integer		
+char2hexint()	Returns the hexadecimal representation of the UTF-16BE encoding of the argument		
+checksum()	Checksum of the given values		
+chr()	Convert Unicode code point to a string		
+classify()			
+codepoint()	Returns Unicode code point of a single character string		
+color()			
+combinations()	Return n-element subsets from array		
+concat()	Concatenates an element to an array		
+concat_ws()	Concatenates elements using separator		
+contains()	Determines whether given value exists in the array		
+contains_sequence()	Determines whether an array contains a sequence, with the values in the exact order		
+convex_hull_agg()	Returns a geometry that is the convex hull of all the geometries in the set.		
+corr()			
+cos()	Cosine		
+cosh()	Hyperbolic cosine		
+cosine_similarity()	Cosine similarity between the given sparse vectors		
+count()	Counts the non-null values		
+count_if()			
+covar_pop()			
+covar_samp()			
+crc32()	Compute CRC-32		
+cume_dist()			
+current_date()	Current date		
+current_groups()	Current groups of current user		
+current_timezone()	Current time zone		
+date()			
+date_add()	Add the specified amount of date to the given date		
+date_diff()	Difference of the given dates in the given unit		
+date_format()	Formats the given timestamp by the given format		
+date_parse()			
+date_trunc()	Truncate to the specified precision in the session timezone		
+day()	Day of the month of the given date		
+day_of_month()	Day of the month of the given timestamp		
+day_of_week()	Day of the week of the given date		
+day_of_year()	Day of the year of the given timestamp		
+degrees()	Converts an angle in radians to degrees		
+dense_rank()			
+dow()	Day of the week of the given date		
+doy()	Day of the year of the given date		
+e()	Euler's number		
+element_at()	Get element of array at given index		
+empty_approx_set()	An empty HyperLogLog instance		
+evaluate_classifier_predictions()			
+every()			
+exp()	Euler's number raised to the given power		
+features()			
+filter()	Return array containing elements that match the given predicate		
+first_value()			
+flatten()	Flattens the given array		
+floor()	Round down to nearest integer		
+format_datetime()	Formats the given time by the given format		
+format_number()	Formats large number using a unit symbol		
+from_base()	Convert a string in the given base to a number		
+from_base32()	Decode base32 encoded binary data		
+from_base64()	Decode base64 encoded binary data		
+from_base64url()	Decode URL safe base64 encoded binary data		
+from_big_endian_32()	Decode bigint value from a 32-bit 2's complement big endian varbinary		
+from_big_endian_64()	Decode bigint value from a 64-bit 2's complement big endian varbinary		
+from_encoded_polyline()	Decodes a polyline to a linestring		
+from_geojson_geometry()	Returns a spherical geography from a GeoJSON string		
+from_hex()	Decode hex encoded binary data		
+from_ieee754_32()	Decode the 32-bit big-endian binary in IEEE 754 single-precision floating-point format		
+from_ieee754_64()	Decode the 64-bit big-endian binary in IEEE 754 double-precision floating-point format		
+from_iso8601_date()			
+from_iso8601_timestamp()			
+from_iso8601_timestamp_nanos()			
+from_unixtime()			
+from_unixtime_nanos()			
+from_utf8()	Decodes the UTF-8 encoded string		
+geometric_mean()			
+geometry_from_hadoop_shape()	Returns a Geometry type object from Spatial Framework for Hadoop representation		
+geometry_invalid_reason()	Returns the reason for why the input geometry is not valid. Returns null if the input is valid.		
+geometry_nearest_points()	Return the closest points on the two geometries		
+geometry_to_bing_tiles()	Given a geometry and a zoom level, returns the minimum set of Bing tiles that fully covers that geometry		
+geometry_union()	Returns a geometry that represents the point set union of the input geometries.		
+geometry_union_agg()	Returns a geometry that represents the point set union of the input geometries.		
+great_circle_distance()	Calculates the great-circle distance between two points on the Earth's surface in kilometers		
+greatest()	Get the largest of the given values		
+hamming_distance()	Computes Hamming distance between two strings		
+hash_counts()			
+histogram()	Count the number of times each value occurs		
+hmac_md5()	Compute HMAC with MD5		
+hmac_sha1()	Compute HMAC with SHA1		
+hmac_sha256()	Compute HMAC with SHA256		
+hmac_sha512()	Compute HMAC with SHA512		
+hour()	Hour of the day of the given interval		
+human_readable_seconds()			
+index()	Returns index of first occurrence of a substring (or 0 if not found)		
+infinity()	Infinity		
+intersection_cardinality()			
+inverse_beta_cdf()	Inverse of Beta cdf given a, b parameters and probability		
+inverse_normal_cdf()	Inverse of normal cdf given a mean, std, and probability		
+is_finite()	Test if value is finite		
+is_infinite()	Test if value is infinite		
+is_json_scalar()			
+is_nan()	Test if value is not-a-number		
+jaccard_index()			
+json_array_contains()			
+json_array_get()			
+json_array_length()			
+json_extract()			
+json_extract_scalar()			
+json_format()			
+json_parse()			
+json_size()			
+kurtosis()	Returns the (excess) kurtosis of the argument		
+lag()			
+last_day_of_month()	Last day of the month of the given date		
+last_value()			
+lead()			
+learn_classifier()			
+learn_libsvm_classifier()			
+learn_regressor()			
+least()	Get the smallest of the given values		
+length()	Count of code points of the given string		
+levenshtein_distance()	Computes Levenshtein distance between two strings		
+line_interpolate_point()	Returns a Point interpolated along a LineString at the fraction given.		
+line_interpolate_points()	Returns an array of Points interpolated along a LineString.		
+line_locate_point()	Returns a float between 0 and 1 representing the location of the closest point on the LineString to the given Point, as a fraction of total 2d line length.		
+listagg()	concatenates the input values with the specified separator		
+ln()	Natural logarithm		
+log()	Logarithm to given base		
+log10()	Logarithm to base 10		
+log2()	Logarithm to base 2		
+lower()	Converts the string to lower case		
+lpad()	Pads a varbinary on the left		
+ltrim()	Removes whitespace from the beginning of a string		
+luhn_check()	Checks that a string of digits is valid according to the Luhn algorithm		
+make_set_digest()			
+map()	Constructs a map from the given key/value arrays		
+map_agg()	Aggregates all the rows (key/value pairs) into a single map		
+map_concat()	Concatenates given maps		
+map_entries()	Construct an array of entries from a given map		
+map_filter()	return map containing entries that match the given predicate		
+map_from_entries()	Construct a map from an array of entries		
+map_keys()	Returns the keys of the given map(K,V) as an array		
+map_union()	Aggregate all the maps into a single map		
+map_values()	Returns the values of the given map(K,V) as an array		
+map_zip_with()	Merge two maps into a single map by applying the lambda function to the pair of values with the same key		
+max()	Returns the maximum values of the argument		
+max_by()	Returns the values of the first argument associated with the maximum values of the second argument		
+md5()	Compute md5 hash		
+merge()	Merges the input quantile digests into a single quantile digest		
+merge_set_digest()			
+millisecond()	Millisecond of the second of the given interval		
+min()	Returns the minimum values of the argument		
+min_by()	Returns the values of the first argument associated with the minimum values of the second argument		
+minute()	Minute of the hour of the given interval		
+mod()	Remainder of given quotient		
+month()	Month of the year of the given date		
+multimap_agg()	Aggregates all the rows (key/value pairs) into a single multimap		
+multimap_from_entries()	Construct a multimap from an array of entries		
+murmur3()	Compute murmur3 hash		
+nan()	Constant representing not-a-number		
+ngrams()	Return N-grams for the input		
+none_match()	Returns true if all elements of the array don't match the given predicate		
+normal_cdf()	Normal cdf given a mean, standard deviation, and value		
+normalize()	Transforms the string to normalized form		
+now()	Current timestamp with time zone		
+nth_value()			
+ntile()			
+numeric_histogram()			
+objectid()	Mongodb ObjectId		
+objectid_timestamp()	Timestamp from the given Mongodb ObjectId		
+parse_data_size()	Converts data size string to bytes		
+parse_datetime()	Parses the specified date/time by the given format		
+parse_duration()	Convert duration string to an interval		
+parse_presto_data_size()	Converts data size string to bytes		
+percent_rank()			
+pi()	The constant Pi		
+pow()	Value raised to the power of exponent		
+power()	Value raised to the power of exponent		
+qdigest_agg()	Returns a qdigest from the set of bigints		
+quantile_at_value()	Given an input x between min/max values of qdigest, find which quantile is represented by that value		
+quarter()	Quarter of the year of the given date		
+radians()	Converts an angle in degrees to radians		
+rand()	A pseudo-random number between 0 and value (exclusive)		
+random()	A pseudo-random number between start and stop (exclusive)		
+rank()			
+reduce()	Reduce elements of the array into a single value		
+reduce_agg()	Reduce input elements into a single value		
+regexp_count()	Returns the number of times that a pattern occurs in a string		
+regexp_extract()	String extracted using the given pattern		
+regexp_extract_all()	String(s) extracted using the given pattern		
+regexp_like()	Returns whether the pattern is contained within the string		
+regexp_position()	Returns the index of the matched substring		
+regexp_replace()	Replaces substrings matching a regular expression using a lambda function		
+regexp_split()	Returns array of strings split by pattern		
+regr_intercept()			
+regr_slope()			
+regress()			
+render()			
+replace()	Greedily replaces occurrences of a pattern with a string		
+reverse()	Returns an array which has the reversed order of the given array.		
+rgb()			
+round()	Round to nearest integer		
+row_number()			
+rpad()	Pads a varbinary on the right		
+rtrim()	Removes whitespace from the end of a string		
+second()	Second of the minute of the given interval		
+sequence()	Sequence function to generate synthetic arrays		
+sha1()	Compute sha1 hash		
+sha256()	Compute sha256 hash		
+sha512()	Compute sha512 hash		
+shuffle()	Generates a random permutation of the given array.		
+sign()	Signum		
+simplify_geometry()	Returns a "simplified" version of the given geometry		
+sin()	Sine		
+sinh()	Hyperbolic sine		
+skewness()	Returns the skewness of the argument		
+slice()	Subsets an array given an offset (1-indexed) and length		
+soundex()	Encodes a string into a Soundex value		
+spatial_partitioning()			
+spatial_partitions()	Returns an array of spatial partition IDs for a given geometry		
+split()			
+split_part()	Splits a string by a delimiter and returns the specified field (counting from one)		
+split_to_map()	Creates a map using entryDelimiter and keyValueDelimiter		
+split_to_multimap()	Creates a multimap by splitting a string into key/value pairs		
+spooky_hash_v2_32()	Compute SpookyHashV2 32-bit hash		
+spooky_hash_v2_64()	Compute SpookyHashV2 64-bit hash		
+sqrt()	Square root		
+ST_Area()	Returns the 2D Euclidean area of a geometry		
+ST_AsBinary()	Returns the Well-Known Binary (WKB) representation of the geometry		
+ST_AsText()	Returns the Well-Known Text (WKT) representation of the geometry		
+ST_Boundary()	Returns the closure of the combinatorial boundary of this Geometry		
+ST_Buffer()	Returns the geometry that represents all points whose distance from the specified geometry is less than or equal to the specified distance		
+ST_Centroid()	Returns the Point value that is the mathematical centroid of a Geometry		
+ST_Contains()	Returns TRUE if and only if no points of right lie in the exterior of left, and at least one point of the interior of left lies in the interior of right		
+ST_ConvexHull()	Returns the minimum convex geometry that encloses all input geometries		
+ST_CoordDim()	Return the coordinate dimension of the Geometry		
+ST_Crosses()	Returns TRUE if the supplied geometries have some, but not all, interior points in common		
+ST_Difference()	Returns the Geometry value that represents the point set difference of two geometries		
+ST_Dimension()	Returns the inherent dimension of this Geometry object, which must be less than or equal to the coordinate dimension		
+ST_Disjoint()	Returns TRUE if the Geometries do not spatially intersect - if they do not share any space together		
+ST_Distance()	Returns the 2-dimensional cartesian minimum distance (based on spatial ref) between two geometries in projected units		
+ST_Distance()	Returns the great-circle distance in meters between two SphericalGeography points.		
+ST_EndPoint()	Returns the last point of a LINESTRING geometry as a Point		
+ST_Envelope()	Returns the bounding rectangular polygon of a Geometry		
+ST_EnvelopeAsPts()	Returns the lower left and upper right corners of bounding rectangular polygon of a Geometry		
+ST_Equals()	Returns TRUE if the given geometries represent the same geometry		
+ST_ExteriorRing()	Returns a line string representing the exterior ring of the POLYGON		
+ST_Geometries()	Returns an array of geometries in the specified collection		
+ST_GeometryFromText()	Returns a Geometry type object from Well-Known Text representation (WKT)		
+ST_GeometryN()	Returns the geometry element at the specified index (indices started with 1)		
+ST_GeometryType()	Returns the type of the geometry		
+ST_GeomFromBinary()	Returns a Geometry type object from Well-Known Binary representation (WKB)		
+ST_InteriorRingN()	Returns the interior ring element at the specified index (indices start at 1)		
+ST_InteriorRings()	Returns an array of interior rings of a polygon		
+ST_Intersection()	Returns the Geometry value that represents the point set intersection of two Geometries		
+ST_Intersects()	Returns TRUE if the Geometries spatially intersect in 2D - (share any portion of space) and FALSE if they don't (they are Disjoint)		
+ST_IsClosed()	Returns TRUE if the LineString or Multi-LineString's start and end points are coincident		
+ST_IsEmpty()	Returns TRUE if this Geometry is an empty geometrycollection, polygon, point etc		
+ST_IsRing()	Returns TRUE if and only if the line is closed and simple		
+ST_IsSimple()	Returns TRUE if this Geometry has no anomalous geometric points, such as self intersection or self tangency		
+ST_IsValid()	Returns true if the input geometry is well formed		
+ST_Length()	Returns the length of a LineString or Multi-LineString using Euclidean measurement on a 2D plane (based on spatial ref) in projected units		
+ST_Length()	Returns the great-circle length in meters of a linestring or multi-linestring on Earth's surface		
+ST_LineFromText()	Returns a Geometry type LineString object from Well-Known Text representation (WKT)		
+ST_LineString()	Returns a LineString from an array of points		
+ST_MultiPoint()	Returns a multi-point geometry formed from input points		
+ST_NumGeometries()	Returns the cardinality of the geometry collection		
+ST_NumInteriorRing()	Returns the cardinality of the collection of interior rings of a polygon		
+ST_NumPoints()	Returns the number of points in a Geometry		
+ST_Overlaps()	Returns TRUE if the Geometries share space, are of the same dimension, but are not completely contained by each other		
+ST_Point()	Returns a Geometry type Point object with the given coordinate values		
+ST_PointN()	Returns the vertex of a linestring at the specified index (indices started with 1) 		
+ST_Points()	Returns an array of points in a geometry		
+ST_Polygon()	Returns a Geometry type Polygon object from Well-Known Text representation (WKT)		
+ST_Relate()	Returns TRUE if this Geometry is spatially related to another Geometry		
+ST_StartPoint()	Returns the first point of a LINESTRING geometry as a Point		
+ST_SymDifference()	Returns the Geometry value that represents the point set symmetric difference of two Geometries		
+ST_Touches()	Returns TRUE if the geometries have at least one point in common, but their interiors do not intersect		
+ST_Union()	Returns a geometry that represents the point set union of the input geometries.		
+ST_Within()	Returns TRUE if the geometry A is completely inside geometry B		
+ST_X()	Return the X coordinate of the point		
+ST_XMax()	Returns X maxima of a bounding box of a Geometry		
+ST_XMin()	Returns X minima of a bounding box of a Geometry		
+ST_Y()	Return the Y coordinate of the point		
+ST_YMax()	Returns Y maxima of a bounding box of a Geometry		
+ST_YMin()	Returns Y minima of a bounding box of a Geometry		
+starts_with()	Determine whether source starts with prefix or not		
+stddev()	Returns the sample standard deviation of the argument		
+stddev_pop()	Returns the population standard deviation of the argument		
+stddev_samp()	Returns the sample standard deviation of the argument		
+strpos()	Returns index of first occurrence of a substring (or 0 if not found)		
+substr()	Suffix starting at given index		
+substring()	Suffix starting at given index		
+sum()	Calculates the sum over the input values		
+tan()	Tangent		
+tanh()	Hyperbolic tangent		
+tdigest_agg()			
+timestamp_objectid()	Mongodb ObjectId from the given timestamp		
+timezone_hour()	Time zone hour of the given time		
+timezone_minute()	Time zone minute of the given time		
+to_base()	Convert a number to a string in the given base		
+to_base32()	Encode binary data as base32		
+to_base64()	Encode binary data as base64		
+to_base64url()	Encode binary data as base64 using the URL safe alphabet		
+to_big_endian_32()	Encode value as a 32-bit 2's complement big endian varbinary		
+to_big_endian_64()	Encode value as a 64-bit 2's complement big endian varbinary		
+to_char()	Formats a timestamp		
+to_date()	Converts a string to a DATE data type		
+to_encoded_polyline()	Encodes a linestring or multipoint geometry to a polyline		
+to_geojson_geometry()	Returns GeoJSON string based on the input spherical geography		
+to_geometry()	Converts a SphericalGeography object to a Geometry object.		
+to_hex()	Encode binary data as hex		
+to_ieee754_32()	Encode value as a big endian varbinary according to IEEE 754 single-precision floating-point format		
+to_ieee754_64()	Encode value as a big endian varbinary according to IEEE 754 double-precision floating-point format		
+to_iso8601()			
+to_milliseconds()			
+to_spherical_geography()	Converts a Geometry object to a SphericalGeography object		
+to_timestamp()	Converts a string to a TIMESTAMP data type		
+to_unixtime()			
+to_utf8()	Encodes the string to UTF-8		
+transform()	Apply lambda to each element of the array		
+transform_keys()	Apply lambda to each entry of the map and transform the key		
+transform_values()	Apply lambda to each entry of the map and transform the value		
+translate()	Translate characters from the source string based on original and translations strings		
+trim()	Removes whitespace from the beginning and end of a string		
+trim_array()	Remove elements from the end of array		
+truncate()	Round to integer by dropping given number of digits after decimal point		
+typeof()	Textual representation of expression type		
+upper()	Converts the string to upper case		
+url_decode()	Unescape a URL-encoded string		
+url_encode()	Escape a string for use in URL query parameter names and values		
+url_extract_fragment()	Extract fragment from url		
+url_extract_host()	Extract host from url		
+url_extract_parameter()	Extract query parameter from url		
+url_extract_path()	Extract part from url		
+url_extract_port()	Extract port from url		
+url_extract_protocol()	Extract protocol from url		
+url_extract_query()	Extract query from url		
+uuid()	Generates a random UUID		
+value_at_quantile()	Given an input q between [0, 1], find the value whose rank in the sorted sequence of the n values represented by the qdigest is qn.		
+values_at_quantiles()	For each input q between [0, 1], find the value whose rank in the sorted sequence of the n values represented by the qdigest is qn.		
+var_pop()	Returns the population variance of the argument		
+var_samp()	Returns the sample variance of the argument		
+variance()	Returns the sample variance of the argument		
+week()	Week of the year of the given date		
+week_of_year()	Week of the year of the given timestamp		
+width_bucket()	The bucket number of a value given an array of bins		
+wilson_interval_lower()	Binomial confidence interval lower bound using Wilson score		
+wilson_interval_upper()	Binomial confidence interval upper bound using Wilson score		
+with_timezone()			
+word_stem()	Returns the stem of a word in the English language		
+xxhash64()	Compute xxhash64 hash		
+year()	Year of the given date		
+year_of_week()	Year of the ISO week of the given date		
+yow()	Year of the ISO week of the given date		
+zip()	Merges the given arrays, element-wise, into a single array of rows.		
+zip_with()	Merge two arrays, element-wise, into a single array using the lambda function		

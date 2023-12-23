@@ -1,0 +1,1610 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0
+rootdir: /home/tyler/dev/projects/harlequin-trino
+collected 10 items
+
+tests/test_adapter.py ...FFFFFF.                                         [100%]
+
+=================================== FAILURES ===================================
+_____________________ test_connect_raises_connection_error _____________________
+
+    def test_connect_raises_connection_error() -> None:
+>       with pytest.raises(HarlequinConnectionError):
+E       Failed: DID NOT RAISE <class 'harlequin.exception.HarlequinConnectionError'>
+
+tests/test_adapter.py:35: Failed
+_______________________________ test_get_catalog _______________________________
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+>               host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+E               AttributeError: 'NoneType' object has no attribute 'groups'
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:425: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+>           scheme, auth, host, port, path, query, fragment = parse_url(url)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:434: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+                host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                if auth and normalize_uri:
+                    auth = _encode_invalid_chars(auth, _USERINFO_CHARS)
+                if port == "":
+                    port = None
+            else:
+                auth, host, port = None, None, None
+    
+            if port is not None:
+                port_int = int(port)
+                if not (0 <= port_int <= 65535):
+                    raise LocationParseError(url)
+            else:
+                port_int = None
+    
+            host = _normalize_host(host, scheme)
+    
+            if normalize_uri and path:
+                path = _remove_path_dot_segments(path)
+                path = _encode_invalid_chars(path, _PATH_CHARS)
+            if normalize_uri and query:
+                query = _encode_invalid_chars(query, _QUERY_CHARS)
+            if normalize_uri and fragment:
+                fragment = _encode_invalid_chars(fragment, _FRAGMENT_CHARS)
+    
+        except (ValueError, AttributeError) as e:
+>           raise LocationParseError(source_url) from e
+E           urllib3.exceptions.LocationParseError: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:451: LocationParseError
+
+During handling of the above exception, another exception occurred:
+
+self = <trino.client.TrinoQuery object at 0x7fe2c79e74f0>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+>           response = self._request.post(self._query, additional_http_headers)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:793: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:555: in post
+    http_response = self._post(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:894: in decorated
+    raise error
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:881: in decorated
+    result = func(*args, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:486: in prepare_request
+    p.prepare(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:368: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+>           raise InvalidURL(*e.args)
+E           requests.exceptions.InvalidURL: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:436: InvalidURL
+
+During handling of the above exception, another exception occurred:
+
+connection = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c79e7be0>
+
+    def test_get_catalog(connection: HarlequinTrinoConnection) -> None:
+>       catalog = connection.get_catalog()
+
+tests/test_adapter.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/harlequin_trino/adapter.py:81: in get_catalog
+    catalogs = self._get_catalogs()
+src/harlequin_trino/adapter.py:129: in _get_catalogs
+    cur.execute("SHOW CATALOGS")
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/dbapi.py:592: in execute
+    self._iterator = iter(self._query.execute())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <trino.client.TrinoQuery object at 0x7fe2c79e74f0>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+            response = self._request.post(self._query, additional_http_headers)
+        except requests.exceptions.RequestException as e:
+>           raise trino.exceptions.TrinoConnectionError("failed to execute: {}".format(e))
+E           trino.exceptions.TrinoConnectionError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:795: TrinoConnectionError
+------------------------------ Captured log call -------------------------------
+INFO     trino.client:client.py:892 failed after 1 attempts
+_______________________________ test_execute_ddl _______________________________
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+>               host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+E               AttributeError: 'NoneType' object has no attribute 'groups'
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:425: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+>           scheme, auth, host, port, path, query, fragment = parse_url(url)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:434: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+                host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                if auth and normalize_uri:
+                    auth = _encode_invalid_chars(auth, _USERINFO_CHARS)
+                if port == "":
+                    port = None
+            else:
+                auth, host, port = None, None, None
+    
+            if port is not None:
+                port_int = int(port)
+                if not (0 <= port_int <= 65535):
+                    raise LocationParseError(url)
+            else:
+                port_int = None
+    
+            host = _normalize_host(host, scheme)
+    
+            if normalize_uri and path:
+                path = _remove_path_dot_segments(path)
+                path = _encode_invalid_chars(path, _PATH_CHARS)
+            if normalize_uri and query:
+                query = _encode_invalid_chars(query, _QUERY_CHARS)
+            if normalize_uri and fragment:
+                fragment = _encode_invalid_chars(fragment, _FRAGMENT_CHARS)
+    
+        except (ValueError, AttributeError) as e:
+>           raise LocationParseError(source_url) from e
+E           urllib3.exceptions.LocationParseError: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:451: LocationParseError
+
+During handling of the above exception, another exception occurred:
+
+self = <trino.client.TrinoQuery object at 0x7fe2c77a30a0>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+>           response = self._request.post(self._query, additional_http_headers)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:793: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:555: in post
+    http_response = self._post(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:894: in decorated
+    raise error
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:881: in decorated
+    result = func(*args, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:486: in prepare_request
+    p.prepare(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:368: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+>           raise InvalidURL(*e.args)
+E           requests.exceptions.InvalidURL: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:436: InvalidURL
+
+During handling of the above exception, another exception occurred:
+
+self = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c77a3be0>
+query = 'create table foo (a int)'
+
+    def execute(self, query: str) -> HarlequinCursor | None:
+        try:
+>           cur = self.conn.cursor().execute(query)  # type: ignore
+
+src/harlequin_trino/adapter.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/dbapi.py:592: in execute
+    self._iterator = iter(self._query.execute())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <trino.client.TrinoQuery object at 0x7fe2c77a30a0>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+            response = self._request.post(self._query, additional_http_headers)
+        except requests.exceptions.RequestException as e:
+>           raise trino.exceptions.TrinoConnectionError("failed to execute: {}".format(e))
+E           trino.exceptions.TrinoConnectionError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:795: TrinoConnectionError
+
+The above exception was the direct cause of the following exception:
+
+connection = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c77a3be0>
+
+    def test_execute_ddl(connection: HarlequinTrinoConnection) -> None:
+>       cur = connection.execute("create table foo (a int)")
+
+tests/test_adapter.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c77a3be0>
+query = 'create table foo (a int)'
+
+    def execute(self, query: str) -> HarlequinCursor | None:
+        try:
+            cur = self.conn.cursor().execute(query)  # type: ignore
+        except Exception as e:
+>           raise HarlequinQueryError(
+                msg=str(e),
+                title="Harlequin encountered an error while executing your query.",
+            ) from e
+E           harlequin.exception.HarlequinQueryError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+src/harlequin_trino/adapter.py:70: HarlequinQueryError
+------------------------------ Captured log call -------------------------------
+INFO     trino.client:client.py:892 failed after 1 attempts
+_____________________________ test_execute_select ______________________________
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+>               host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+E               AttributeError: 'NoneType' object has no attribute 'groups'
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:425: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+>           scheme, auth, host, port, path, query, fragment = parse_url(url)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:434: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+                host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                if auth and normalize_uri:
+                    auth = _encode_invalid_chars(auth, _USERINFO_CHARS)
+                if port == "":
+                    port = None
+            else:
+                auth, host, port = None, None, None
+    
+            if port is not None:
+                port_int = int(port)
+                if not (0 <= port_int <= 65535):
+                    raise LocationParseError(url)
+            else:
+                port_int = None
+    
+            host = _normalize_host(host, scheme)
+    
+            if normalize_uri and path:
+                path = _remove_path_dot_segments(path)
+                path = _encode_invalid_chars(path, _PATH_CHARS)
+            if normalize_uri and query:
+                query = _encode_invalid_chars(query, _QUERY_CHARS)
+            if normalize_uri and fragment:
+                fragment = _encode_invalid_chars(fragment, _FRAGMENT_CHARS)
+    
+        except (ValueError, AttributeError) as e:
+>           raise LocationParseError(source_url) from e
+E           urllib3.exceptions.LocationParseError: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:451: LocationParseError
+
+During handling of the above exception, another exception occurred:
+
+self = <trino.client.TrinoQuery object at 0x7fe2c789b3d0>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+>           response = self._request.post(self._query, additional_http_headers)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:793: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:555: in post
+    http_response = self._post(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:894: in decorated
+    raise error
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:881: in decorated
+    result = func(*args, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:486: in prepare_request
+    p.prepare(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:368: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+>           raise InvalidURL(*e.args)
+E           requests.exceptions.InvalidURL: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:436: InvalidURL
+
+During handling of the above exception, another exception occurred:
+
+self = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c789ba60>
+query = 'select 1 as a'
+
+    def execute(self, query: str) -> HarlequinCursor | None:
+        try:
+>           cur = self.conn.cursor().execute(query)  # type: ignore
+
+src/harlequin_trino/adapter.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/dbapi.py:592: in execute
+    self._iterator = iter(self._query.execute())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <trino.client.TrinoQuery object at 0x7fe2c789b3d0>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+            response = self._request.post(self._query, additional_http_headers)
+        except requests.exceptions.RequestException as e:
+>           raise trino.exceptions.TrinoConnectionError("failed to execute: {}".format(e))
+E           trino.exceptions.TrinoConnectionError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:795: TrinoConnectionError
+
+The above exception was the direct cause of the following exception:
+
+connection = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c789ba60>
+
+    def test_execute_select(connection: HarlequinTrinoConnection) -> None:
+>       cur = connection.execute("select 1 as a")
+
+tests/test_adapter.py:57: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c789ba60>
+query = 'select 1 as a'
+
+    def execute(self, query: str) -> HarlequinCursor | None:
+        try:
+            cur = self.conn.cursor().execute(query)  # type: ignore
+        except Exception as e:
+>           raise HarlequinQueryError(
+                msg=str(e),
+                title="Harlequin encountered an error while executing your query.",
+            ) from e
+E           harlequin.exception.HarlequinQueryError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+src/harlequin_trino/adapter.py:70: HarlequinQueryError
+------------------------------ Captured log call -------------------------------
+INFO     trino.client:client.py:892 failed after 1 attempts
+________________________ test_execute_select_dupe_cols _________________________
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+>               host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+E               AttributeError: 'NoneType' object has no attribute 'groups'
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:425: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+>           scheme, auth, host, port, path, query, fragment = parse_url(url)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:434: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+                host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                if auth and normalize_uri:
+                    auth = _encode_invalid_chars(auth, _USERINFO_CHARS)
+                if port == "":
+                    port = None
+            else:
+                auth, host, port = None, None, None
+    
+            if port is not None:
+                port_int = int(port)
+                if not (0 <= port_int <= 65535):
+                    raise LocationParseError(url)
+            else:
+                port_int = None
+    
+            host = _normalize_host(host, scheme)
+    
+            if normalize_uri and path:
+                path = _remove_path_dot_segments(path)
+                path = _encode_invalid_chars(path, _PATH_CHARS)
+            if normalize_uri and query:
+                query = _encode_invalid_chars(query, _QUERY_CHARS)
+            if normalize_uri and fragment:
+                fragment = _encode_invalid_chars(fragment, _FRAGMENT_CHARS)
+    
+        except (ValueError, AttributeError) as e:
+>           raise LocationParseError(source_url) from e
+E           urllib3.exceptions.LocationParseError: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:451: LocationParseError
+
+During handling of the above exception, another exception occurred:
+
+self = <trino.client.TrinoQuery object at 0x7fe2c78ce380>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+>           response = self._request.post(self._query, additional_http_headers)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:793: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:555: in post
+    http_response = self._post(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:894: in decorated
+    raise error
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:881: in decorated
+    result = func(*args, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:486: in prepare_request
+    p.prepare(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:368: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+>           raise InvalidURL(*e.args)
+E           requests.exceptions.InvalidURL: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:436: InvalidURL
+
+During handling of the above exception, another exception occurred:
+
+self = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c78ceb90>
+query = 'select 1 as a, 2 as a, 3 as a'
+
+    def execute(self, query: str) -> HarlequinCursor | None:
+        try:
+>           cur = self.conn.cursor().execute(query)  # type: ignore
+
+src/harlequin_trino/adapter.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/dbapi.py:592: in execute
+    self._iterator = iter(self._query.execute())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <trino.client.TrinoQuery object at 0x7fe2c78ce380>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+            response = self._request.post(self._query, additional_http_headers)
+        except requests.exceptions.RequestException as e:
+>           raise trino.exceptions.TrinoConnectionError("failed to execute: {}".format(e))
+E           trino.exceptions.TrinoConnectionError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:795: TrinoConnectionError
+
+The above exception was the direct cause of the following exception:
+
+connection = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c78ceb90>
+
+    def test_execute_select_dupe_cols(connection: HarlequinTrinoConnection) -> None:
+>       cur = connection.execute("select 1 as a, 2 as a, 3 as a")
+
+tests/test_adapter.py:67: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c78ceb90>
+query = 'select 1 as a, 2 as a, 3 as a'
+
+    def execute(self, query: str) -> HarlequinCursor | None:
+        try:
+            cur = self.conn.cursor().execute(query)  # type: ignore
+        except Exception as e:
+>           raise HarlequinQueryError(
+                msg=str(e),
+                title="Harlequin encountered an error while executing your query.",
+            ) from e
+E           harlequin.exception.HarlequinQueryError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+src/harlequin_trino/adapter.py:70: HarlequinQueryError
+------------------------------ Captured log call -------------------------------
+INFO     trino.client:client.py:892 failed after 1 attempts
+________________________________ test_set_limit ________________________________
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+>               host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+E               AttributeError: 'NoneType' object has no attribute 'groups'
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:425: AttributeError
+
+The above exception was the direct cause of the following exception:
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+>           scheme, auth, host, port, path, query, fragment = parse_url(url)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:434: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+url = 'http://None:None/v1/statement'
+
+    def parse_url(url: str) -> Url:
+        """
+        Given a url, return a parsed :class:`.Url` namedtuple. Best-effort is
+        performed to parse incomplete urls. Fields not provided will be None.
+        This parser is RFC 3986 and RFC 6874 compliant.
+    
+        The parser logic and helper functions are based heavily on
+        work done in the ``rfc3986`` module.
+    
+        :param str url: URL to parse into a :class:`.Url` namedtuple.
+    
+        Partly backwards-compatible with :mod:`urllib.parse`.
+    
+        Example:
+    
+        .. code-block:: python
+    
+            import urllib3
+    
+            print( urllib3.util.parse_url('http://google.com/mail/'))
+            # Url(scheme='http', host='google.com', port=None, path='/mail/', ...)
+    
+            print( urllib3.util.parse_url('google.com:80'))
+            # Url(scheme=None, host='google.com', port=80, path=None, ...)
+    
+            print( urllib3.util.parse_url('/foo?bar'))
+            # Url(scheme=None, host=None, port=None, path='/foo', query='bar', ...)
+        """
+        if not url:
+            # Empty
+            return Url()
+    
+        source_url = url
+        if not _SCHEME_RE.search(url):
+            url = "//" + url
+    
+        scheme: str | None
+        authority: str | None
+        auth: str | None
+        host: str | None
+        port: str | None
+        port_int: int | None
+        path: str | None
+        query: str | None
+        fragment: str | None
+    
+        try:
+            scheme, authority, path, query, fragment = _URI_RE.match(url).groups()  # type: ignore[union-attr]
+            normalize_uri = scheme is None or scheme.lower() in _NORMALIZABLE_SCHEMES
+    
+            if scheme:
+                scheme = scheme.lower()
+    
+            if authority:
+                auth, _, host_port = authority.rpartition("@")
+                auth = auth or None
+                host, port = _HOST_PORT_RE.match(host_port).groups()  # type: ignore[union-attr]
+                if auth and normalize_uri:
+                    auth = _encode_invalid_chars(auth, _USERINFO_CHARS)
+                if port == "":
+                    port = None
+            else:
+                auth, host, port = None, None, None
+    
+            if port is not None:
+                port_int = int(port)
+                if not (0 <= port_int <= 65535):
+                    raise LocationParseError(url)
+            else:
+                port_int = None
+    
+            host = _normalize_host(host, scheme)
+    
+            if normalize_uri and path:
+                path = _remove_path_dot_segments(path)
+                path = _encode_invalid_chars(path, _PATH_CHARS)
+            if normalize_uri and query:
+                query = _encode_invalid_chars(query, _QUERY_CHARS)
+            if normalize_uri and fragment:
+                fragment = _encode_invalid_chars(fragment, _FRAGMENT_CHARS)
+    
+        except (ValueError, AttributeError) as e:
+>           raise LocationParseError(source_url) from e
+E           urllib3.exceptions.LocationParseError: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/urllib3/util/url.py:451: LocationParseError
+
+During handling of the above exception, another exception occurred:
+
+self = <trino.client.TrinoQuery object at 0x7fe2c79e40d0>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+>           response = self._request.post(self._query, additional_http_headers)
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:793: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:555: in post
+    http_response = self._post(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:894: in decorated
+    raise error
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:881: in decorated
+    result = func(*args, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:637: in post
+    return self.request("POST", url, data=data, json=json, **kwargs)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:575: in request
+    prep = self.prepare_request(req)
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/sessions.py:486: in prepare_request
+    p.prepare(
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:368: in prepare
+    self.prepare_url(url, params)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <PreparedRequest [POST]>, url = 'http://None:None/v1/statement'
+params = OrderedDict()
+
+    def prepare_url(self, url, params):
+        """Prepares the given HTTP URL."""
+        #: Accept objects that have string representations.
+        #: We're unable to blindly call unicode/str functions
+        #: as this will include the bytestring indicator (b'')
+        #: on python 3.x.
+        #: https://github.com/psf/requests/pull/2238
+        if isinstance(url, bytes):
+            url = url.decode("utf8")
+        else:
+            url = str(url)
+    
+        # Remove leading whitespaces from url
+        url = url.lstrip()
+    
+        # Don't do any URL preparation for non-HTTP schemes like `mailto`,
+        # `data` etc to work around exceptions from `url_parse`, which
+        # handles RFC 3986 only.
+        if ":" in url and not url.lower().startswith("http"):
+            self.url = url
+            return
+    
+        # Support for unicode domain names and paths.
+        try:
+            scheme, auth, host, port, path, query, fragment = parse_url(url)
+        except LocationParseError as e:
+>           raise InvalidURL(*e.args)
+E           requests.exceptions.InvalidURL: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/requests/models.py:436: InvalidURL
+
+During handling of the above exception, another exception occurred:
+
+self = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c79e4400>
+query = 'select 1 as a union all select 2 union all select 3'
+
+    def execute(self, query: str) -> HarlequinCursor | None:
+        try:
+>           cur = self.conn.cursor().execute(query)  # type: ignore
+
+src/harlequin_trino/adapter.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/dbapi.py:592: in execute
+    self._iterator = iter(self._query.execute())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <trino.client.TrinoQuery object at 0x7fe2c79e40d0>
+additional_http_headers = None
+
+    def execute(self, additional_http_headers=None) -> TrinoResult:
+        """Initiate a Trino query by sending the SQL statement
+    
+        This is the first HTTP request sent to the coordinator.
+        It sets the query_id and returns a Result object used to
+        track the rows returned by the query. To fetch all rows,
+        call fetch() until finished is true.
+        """
+        if self.cancelled:
+            raise exceptions.TrinoUserError("Query has been cancelled", self.query_id)
+    
+        try:
+            response = self._request.post(self._query, additional_http_headers)
+        except requests.exceptions.RequestException as e:
+>           raise trino.exceptions.TrinoConnectionError("failed to execute: {}".format(e))
+E           trino.exceptions.TrinoConnectionError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+../../../.cache/pypoetry/virtualenvs/harlequin-trino-AkOxW1Ew-py3.10/lib/python3.10/site-packages/trino/client.py:795: TrinoConnectionError
+
+The above exception was the direct cause of the following exception:
+
+connection = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c79e4400>
+
+    def test_set_limit(connection: HarlequinTrinoConnection) -> None:
+>       cur = connection.execute("select 1 as a union all select 2 union all select 3")
+
+tests/test_adapter.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <harlequin_trino.adapter.HarlequinTrinoConnection object at 0x7fe2c79e4400>
+query = 'select 1 as a union all select 2 union all select 3'
+
+    def execute(self, query: str) -> HarlequinCursor | None:
+        try:
+            cur = self.conn.cursor().execute(query)  # type: ignore
+        except Exception as e:
+>           raise HarlequinQueryError(
+                msg=str(e),
+                title="Harlequin encountered an error while executing your query.",
+            ) from e
+E           harlequin.exception.HarlequinQueryError: failed to execute: Failed to parse: http://None:None/v1/statement
+
+src/harlequin_trino/adapter.py:70: HarlequinQueryError
+------------------------------ Captured log call -------------------------------
+INFO     trino.client:client.py:892 failed after 1 attempts
+=========================== short test summary info ============================
+FAILED tests/test_adapter.py::test_connect_raises_connection_error - Failed: ...
+FAILED tests/test_adapter.py::test_get_catalog - trino.exceptions.TrinoConnec...
+FAILED tests/test_adapter.py::test_execute_ddl - harlequin.exception.Harlequi...
+FAILED tests/test_adapter.py::test_execute_select - harlequin.exception.Harle...
+FAILED tests/test_adapter.py::test_execute_select_dupe_cols - harlequin.excep...
+FAILED tests/test_adapter.py::test_set_limit - harlequin.exception.HarlequinQ...
+========================= 6 failed, 4 passed in 1.08s ==========================
