@@ -1,51 +1,56 @@
 import sys
+from typing import Generator
 
 import pytest
 from harlequin.adapter import HarlequinAdapter, HarlequinConnection, HarlequinCursor
 from harlequin.catalog import Catalog, CatalogItem
-from harlequin.exception import HarlequinConnectionError, HarlequinQueryError
+from harlequin.exception import HarlequinQueryError
 from harlequin_trino.adapter import HarlequinTrinoAdapter, HarlequinTrinoConnection
 from textual_fastdatatable.backend import create_backend
+
+from trino.dbapi import connect
 
 if sys.version_info < (3, 10):
     from importlib_metadata import entry_points
 else:
     from importlib.metadata import entry_points
 
+
 @pytest.fixture
-def trino_options():
-    return {
-        "host": "localhost",
-        "port": 8080,
-        "user": "trino"
-    }
+def trino_options() -> dict:
+    return {"host": "localhost", "port": 8080, "user": "trino"}
+
 
 def test_plugin_discovery() -> None:
     PLUGIN_NAME = "trino"
     eps = entry_points(group="harlequin.adapter")
     assert eps[PLUGIN_NAME]
-    adapter_cls = eps[PLUGIN_NAME].load()
+    adapter_cls = eps[PLUGIN_NAME].load()  # type: ignore
     assert issubclass(adapter_cls, HarlequinAdapter)
     assert adapter_cls == HarlequinTrinoAdapter
 
 
-def test_connect(trino_options) -> None:
-    conn = HarlequinTrinoAdapter(conn_str=tuple(), **trino_options).connect()
+def test_connect(trino_options: dict) -> None:
+    conn = HarlequinTrinoAdapter(**trino_options).connect()
     assert isinstance(conn, HarlequinConnection)
 
 
-def test_init_extra_kwargs(trino_options) -> None:
-    assert HarlequinTrinoAdapter(conn_str=tuple(), **trino_options, foo=1, bar="baz").connect()
-
-
-def test_connect_raises_connection_error() -> None:
-    with pytest.raises(HarlequinConnectionError):
-        _ = HarlequinTrinoAdapter(conn_str=("foo",)).connect()
+def test_init_extra_kwargs(trino_options: dict) -> None:
+    assert HarlequinTrinoAdapter(**trino_options, foo=1, bar="baz").connect()
 
 
 @pytest.fixture
-def connection(trino_options) -> HarlequinTrinoConnection:
-    return HarlequinTrinoAdapter(conn_str=tuple(), **trino_options).connect()
+def connection(trino_options: dict) -> Generator[HarlequinTrinoConnection, None, None]:
+    mytrinoconn = connect(**trino_options)
+    cur = mytrinoconn.cursor()
+    cur.execute("drop schema if exists my_catalog.my_schema cascade")
+    cur.execute("create schema my_catalog.my_schema")
+    cur.close()
+    conn = HarlequinTrinoAdapter(**trino_options).connect()
+    yield conn
+    cur = mytrinoconn.cursor()
+    cur.execute("drop schema if exists my_catalog.my_schema cascade")
+    cur.close()
 
 
 def test_get_catalog(connection: HarlequinTrinoConnection) -> None:
@@ -56,8 +61,10 @@ def test_get_catalog(connection: HarlequinTrinoConnection) -> None:
 
 
 def test_execute_ddl(connection: HarlequinTrinoConnection) -> None:
-    cur = connection.execute("create table tpch.tiny.foo (a int)")
-    assert cur is None
+    cur = connection.execute("CREATE TABLE my_catalog.my_schema.my_table (a int)")
+    assert cur is not None
+    data = cur.fetchall()
+    assert not data
 
 
 def test_execute_select(connection: HarlequinTrinoConnection) -> None:

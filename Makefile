@@ -15,4 +15,4 @@ clean:
 
 .PHONY: serve
 serve:
-	harlequin -P None -a trino --host localhost -p 8080 -U trinio 
+	harlequin -P None -a trino --host localhost -p 8080 -U trino 

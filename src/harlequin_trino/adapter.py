@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Sequence
+from typing import Any
 
 from harlequin import (
     HarlequinAdapter,
@@ -11,18 +11,19 @@ from harlequin.autocomplete.completion import HarlequinCompletion
 from harlequin.catalog import Catalog, CatalogItem
 from harlequin.exception import HarlequinConnectionError, HarlequinQueryError
 from textual_fastdatatable.backend import AutoBackendType
-from trino.dbapi import connect
 
 from harlequin_trino.cli_options import TRINO_OPTIONS
 from harlequin_trino.completions import load_completions
+from trino.auth import BasicAuthentication
+from trino.dbapi import connect
 
 
 class HarlequinTrinoCursor(HarlequinCursor):
-    def __init__(self, cur) -> None:
+    def __init__(self, cur: Any) -> None:
         self.cur = cur
         self._limit: int | None = None
 
-    def columns(self) -> list[tuple[str, str]]: 
+    def columns(self) -> list[tuple[str, str]]:
         assert self.cur.description is not None
         return [(col[0], self._get_short_type(col[1])) for col in self.cur.description]
 
@@ -68,17 +69,26 @@ class HarlequinTrinoCursor(HarlequinCursor):
         }
         return MAPPING.get(type_name.split("(")[0].split(" ")[0], "?")
 
+
 class HarlequinTrinoConnection(HarlequinConnection):
     def __init__(
         self,
-        conn_str: Sequence[str],
         *_: Any,
         init_message: str = "",
         options: dict[str, Any],
     ) -> None:
         self.init_message = init_message
+        modified_options = options.copy()
+        password = modified_options.pop("password")
+        auth = modified_options.pop("require_auth", "None")
+        sslcert = modified_options.pop("sslcert", None)
+        if auth == "password":
+            user = modified_options.get("user")
+            modified_options["auth"] = BasicAuthentication(user, password)
+            modified_options["http_scheme"] = "https"
+            modified_options["verify"] = sslcert if sslcert else False
         try:
-            self.conn = connect(**options)
+            self.conn = connect(**modified_options)
         except Exception as e:
             raise HarlequinConnectionError(
                 msg=str(e), title="Harlequin could not connect to your database."
@@ -86,17 +96,13 @@ class HarlequinTrinoConnection(HarlequinConnection):
 
     def execute(self, query: str) -> HarlequinCursor | None:
         try:
-            cur = self.conn.cursor().execute(query)  # type: ignore
+            cur = self.conn.cursor().execute(query)
         except Exception as e:
             raise HarlequinQueryError(
                 msg=str(e),
                 title="Harlequin encountered an error while executing your query.",
             ) from e
-        else:
-            if cur is not None:
-                return HarlequinTrinoCursor(cur)
-            else:
-                return None
+        return HarlequinTrinoCursor(cur)
 
     def get_catalog(self) -> Catalog:
         catalogs = self._get_catalogs()
@@ -104,14 +110,14 @@ class HarlequinTrinoConnection(HarlequinConnection):
         for (catalog,) in catalogs:
             schemas = self._get_schemas(catalog)
             schema_items: list[CatalogItem] = []
-            for schema in schemas:
+            for (schema,) in schemas:
                 relations = self._get_relations(catalog, schema)
                 rel_items: list[CatalogItem] = []
                 for rel, rel_type in relations:
                     cols = self._get_columns(catalog, schema, rel)
                     col_items = [
                         CatalogItem(
-                            qualified_identifier=f'"{catalog}"."{schema[0]}"."{rel}"."{col}"',
+                            qualified_identifier=f'"{catalog}"."{schema}"."{rel}"."{col}"',
                             query_name=f'"{col}"',
                             label=col,
                             type_label=self._get_short_col_type(col_type),
@@ -120,8 +126,8 @@ class HarlequinTrinoConnection(HarlequinConnection):
                     ]
                     rel_items.append(
                         CatalogItem(
-                            qualified_identifier=f'"{catalog}"."{schema[0]}"."{rel}"',
-                            query_name=f'"{catalog}"."{schema[0]}"."{rel}"',
+                            qualified_identifier=f'"{catalog}"."{schema}"."{rel}"',
+                            query_name=f'"{catalog}"."{schema}"."{rel}"',
                             label=rel,
                             type_label=rel_type,
                             children=col_items,
@@ -129,9 +135,9 @@ class HarlequinTrinoConnection(HarlequinConnection):
                     )
                 schema_items.append(
                     CatalogItem(
-                        qualified_identifier=f'"{catalog}"."{schema[0]}"',
-                        query_name=f'"{catalog}"."{schema[0]}"',
-                        label=schema[0],
+                        qualified_identifier=f'"{catalog}"."{schema}"',
+                        query_name=f'"{catalog}"."{schema}"',
+                        label=schema,
                         type_label="s",
                         children=rel_items,
                     )
@@ -152,16 +158,18 @@ class HarlequinTrinoConnection(HarlequinConnection):
         cur.execute("SHOW CATALOGS")
         results: list[tuple[str]] = cur.fetchall()
         cur.close()
-        return [result for result in results if result[0] not in ["jmx"]] 
+        return [
+            result for result in results if result[0] not in ["jmx", "memory", "system"]
+        ]
 
-    def _get_schemas(self, catalog) -> list[tuple[str]]:
+    def _get_schemas(self, catalog: str) -> list[tuple[str]]:
         cur = self.conn.cursor()
         cur.execute(f"SHOW SCHEMAS FROM {catalog}")
         results: list[tuple[str]] = cur.fetchall()
         cur.close()
-        return results
+        return [result for result in results if result[0] != "information_schema"]
 
-    def _get_relations(self, catalog, schema) -> list[tuple[str]]:
+    def _get_relations(self, catalog: str, schema: str) -> list[tuple[str, str]]:
         cur = self.conn.cursor()
         query = f"""
             SELECT
@@ -171,14 +179,16 @@ class HarlequinTrinoConnection(HarlequinConnection):
                     else 'v'
                 end as table_type
             FROM "{catalog}".information_schema.tables
-            WHERE table_schema = '{schema[0]}'
+            WHERE table_schema = '{schema}'
         """
         cur.execute(query)
         results: list[tuple[str, str]] = cur.fetchall()
         cur.close()
         return results
 
-    def _get_columns(self, catalog, schema, rel) -> list[tuple[str]]:
+    def _get_columns(
+        self, catalog: str, schema: str, rel: str
+    ) -> list[tuple[str, str]]:
         cur = self.conn.cursor()
         query = f"""
             SELECT
@@ -186,7 +196,7 @@ class HarlequinTrinoConnection(HarlequinConnection):
                 data_type 
             FROM {catalog}.information_schema.columns
             WHERE 
-                table_schema = '{schema[0]}'
+                table_schema = '{schema}'
                 and table_name = '{rel}'
         """
         cur.execute(query)
@@ -227,24 +237,23 @@ class HarlequinTrinoAdapter(HarlequinAdapter):
 
     def __init__(
         self,
-        conn_str: Sequence[str],
         host: str | None = None,
         port: str | None = None,
         user: str | None = None,
+        password: str | None = None,
+        require_auth: str | None = None,
+        sslcert: str | None = None,
         **_: Any,
     ) -> None:
-        self.conn_str = conn_str
         self.options = {
             "host": host,
             "port": port,
             "user": user,
+            "password": password,
+            "require_auth": require_auth,
+            "sslcert": sslcert,
         }
 
     def connect(self) -> HarlequinTrinoConnection:
-        if len(self.conn_str) > 1:
-            raise HarlequinConnectionError(
-                "Cannot provide multiple connection strings to the Postgres adapter. "
-                f"{self.conn_str}"
-            )
-        conn = HarlequinTrinoConnection(self.conn_str, options=self.options)
+        conn = HarlequinTrinoConnection(options=self.options)
         return conn

@@ -50,20 +50,20 @@ password = TextOption(
 )
 
 
-connect_timeout = TextOption(
-    name="connect_timeout",
+require_auth = SelectOption(
+    name="require_auth",
     description=(
-        "Maximum time to wait while connecting, in seconds (write as an integer, "
-        "e.g., 10)."
+        "Specifies the authentication method that the client requires from the server. "
+        "If the server does not use the required method to authenticate the client, or "
+        "if the authentication handshake is not fully completed by the server, the "
+        "connection will fail."
     ),
-    validator=_int_validator,
+    choices=["password", "none"],
 )
 
+sslcert = PathOption(
+    name="sslcert",
+    description=("Specifies the file name of the client SSL certificate. "),
+)
 
-TRINO_OPTIONS = [
-    host,
-    port,
-    user,
-    password,
-    connect_timeout,
-]
+TRINO_OPTIONS = [host, port, user, password, require_auth, sslcert]

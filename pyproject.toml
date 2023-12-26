@@ -63,3 +63,7 @@ warn_unused_configs = true
 
 no_implicit_reexport = true
 strict_equality = true
+
+[[tool.mypy.overrides]]
+module = ["trino.dbapi", "trino.auth"]
+ignore_missing_imports = true
