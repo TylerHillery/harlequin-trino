@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Features
+
+-   Add homepage and repository to pyproject.toml
+
 ## [0.1.0] - 2023-12-26
 
 ### Features
