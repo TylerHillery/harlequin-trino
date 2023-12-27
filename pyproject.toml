@@ -1,8 +1,10 @@
 [tool.poetry]
 name = "harlequin_trino"
-version = "0.1.0"
+version = "0.1.1"
 description = "A Harlequin adapter for Trino."
 authors = ["Tyler Hillery <TylerHillery@users.noreply.github.com>"]
+homepage = "https://harlequin.sh"
+repository = "https://github.com/TylerHillery/harlequin-trino"
 license = "MIT"
 readme = "README.md"
 packages = [
