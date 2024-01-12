@@ -4,10 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.1.3] - 2024-01-12
+
 ### Fixes
 
 -   Related to [error retrieving schemas from catalog with - in the name](https://github.com/TylerHillery/harlequin-trino/issues/5)
-  
+
 ## [0.1.2] - 2024-01-12
 
 ### Fixes
@@ -26,7 +28,9 @@ All notable changes to this project will be documented in this file.
 
 -   Adds a basic Trino adapter with most common connection options.
 
-[Unreleased]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.2...HEAD
+[Unreleased]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.3...HEAD
+
+[0.1.3]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.2...0.1.3
 
 [0.1.2]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.1...0.1.2
 
