@@ -164,7 +164,7 @@ class HarlequinTrinoConnection(HarlequinConnection):
 
     def _get_schemas(self, catalog: str) -> list[tuple[str]]:
         cur = self.conn.cursor()
-        cur.execute(f"SHOW SCHEMAS FROM {catalog}")
+        cur.execute(f"SHOW SCHEMAS FROM \"{catalog}\"")
         results: list[tuple[str]] = cur.fetchall()
         cur.close()
         return [result for result in results if result[0] != "information_schema"]
