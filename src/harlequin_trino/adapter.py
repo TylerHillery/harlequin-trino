@@ -194,7 +194,7 @@ class HarlequinTrinoConnection(HarlequinConnection):
             SELECT
                 column_name,
                 data_type 
-            FROM {catalog}.information_schema.columns
+            FROM "{catalog}".information_schema.columns
             WHERE 
                 table_schema = '{schema}'
                 and table_name = '{rel}'
