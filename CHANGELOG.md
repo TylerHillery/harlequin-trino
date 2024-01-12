@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixes
+
+- Resolves [error retrieving schemas from catalog with - in the name](https://github.com/TylerHillery/harlequin-trino/issues/5)
+
 ## [0.1.1] - 2023-12-27
 
 ### Features
