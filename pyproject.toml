@@ -16,7 +16,7 @@ trino = "harlequin_trino:HarlequinTrinoAdapter"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
-harlequin = "^1.7"
+harlequin = ">=1.7,<3"
 trino = "^0.327.0"
 
 [tool.poetry.group.dev.dependencies]
