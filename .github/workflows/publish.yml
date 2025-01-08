@@ -39,7 +39,7 @@ jobs:
         with:
           tag_name: v${{ steps.harlequin_trino_version.outputs.harlequin_trino_version }}
           target_commitish: main
-          token: ${{ secrets.HARLEQUIN_TRINO_RELEASE_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           body_path: CHANGELOG.md
           files: |
             LICENSE
