@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Features
+
+- Widen requirements for Harlequin in pyproject.toml
+
+### Fixes
+
+- Remove custom github token in `release.yml` 
+
 ## [0.1.3] - 2024-01-12
 
 ### Fixes
