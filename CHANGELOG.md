@@ -4,13 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.1.4] - 2025-01-08
+
 ### Features
 
-- Widen requirements for Harlequin in pyproject.toml
+-   Widen requirements for Harlequin in pyproject.toml
 
 ### Fixes
 
-- Remove custom github token in `release.yml` 
+-   Remove custom github token in `release.yml` 
 
 ## [0.1.3] - 2024-01-12
 
@@ -36,7 +38,9 @@ All notable changes to this project will be documented in this file.
 
 -   Adds a basic Trino adapter with most common connection options.
 
-[Unreleased]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.3...HEAD
+[Unreleased]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.4...HEAD
+
+[0.1.4]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.3...0.1.4
 
 [0.1.3]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.2...0.1.3
 
