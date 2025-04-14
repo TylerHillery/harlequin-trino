@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.1.5] - 2025-04-14
+
 ### Features
 
--  Added Google Auth support to the Trino adapter, thanks to [asdf8601](https://github.com/asdf8601) ([#13](https://github.com/TylerHillery/harlequin-trino/pull/13))
+-   Added Google Auth support to the Trino adapter, thanks to [asdf8601](https://github.com/asdf8601) ([#13](https://github.com/TylerHillery/harlequin-trino/pull/13))
 
 ## [0.1.4] - 2025-01-08
 
@@ -42,7 +44,9 @@ All notable changes to this project will be documented in this file.
 
 -   Adds a basic Trino adapter with most common connection options.
 
-[Unreleased]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.4...HEAD
+[Unreleased]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.5...HEAD
+
+[0.1.5]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.4...0.1.5
 
 [0.1.4]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.3...0.1.4
 
