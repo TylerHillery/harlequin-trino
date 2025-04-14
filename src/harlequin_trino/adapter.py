@@ -17,6 +17,11 @@ from harlequin_trino.completions import load_completions
 from trino.auth import BasicAuthentication
 from trino.dbapi import connect
 
+import google.auth
+from google.auth.transport.requests import Request
+from trino.auth import JWTAuthentication
+from trino.dbapi import connect
+
 
 class HarlequinTrinoCursor(HarlequinCursor):
     def __init__(self, cur: Any) -> None:
@@ -82,11 +87,25 @@ class HarlequinTrinoConnection(HarlequinConnection):
         password = modified_options.pop("password")
         auth = modified_options.pop("require_auth", "None")
         sslcert = modified_options.pop("sslcert", None)
+        schema = modified_options.pop("schema", None)
+        catalog = modified_options.pop("catalog", None)
+
         if auth == "password":
             user = modified_options.get("user")
             modified_options["auth"] = BasicAuthentication(user, password)
             modified_options["http_scheme"] = "https"
             modified_options["verify"] = sslcert if sslcert else False
+
+        elif auth == "google":
+            user = modified_options.get("user")
+            credentials, _ = google.auth.default()
+            credentials.refresh(Request())
+            modified_options["auth"] = JWTAuthentication(credentials.token)
+            modified_options["http_scheme"] = "https"
+            modified_options["verify"] = True
+            modified_options["schema"] = schema
+            modified_options["catalog"] = catalog
+
         try:
             self.conn = connect(**modified_options)
         except Exception as e:
@@ -193,9 +212,9 @@ class HarlequinTrinoConnection(HarlequinConnection):
         query = f"""
             SELECT
                 column_name,
-                data_type 
+                data_type
             FROM "{catalog}".information_schema.columns
-            WHERE 
+            WHERE
                 table_schema = '{schema}'
                 and table_name = '{rel}'
         """
@@ -243,6 +262,8 @@ class HarlequinTrinoAdapter(HarlequinAdapter):
         password: str | None = None,
         require_auth: str | None = None,
         sslcert: str | None = None,
+        schema: str | None = None,
+        catalog: str | None = None,
         **_: Any,
     ) -> None:
         self.options = {
@@ -252,6 +273,8 @@ class HarlequinTrinoAdapter(HarlequinAdapter):
             "password": password,
             "require_auth": require_auth,
             "sslcert": sslcert,
+            "schema": schema,
+            "catalog": catalog,
         }
 
     def connect(self) -> HarlequinTrinoConnection:

@@ -58,7 +58,7 @@ require_auth = SelectOption(
         "if the authentication handshake is not fully completed by the server, the "
         "connection will fail."
     ),
-    choices=["password", "none"],
+    choices=["password", "google", "none"],
 )
 
 sslcert = PathOption(
@@ -66,4 +66,15 @@ sslcert = PathOption(
     description=("Specifies the file name of the client SSL certificate. "),
 )
 
-TRINO_OPTIONS = [host, port, user, password, require_auth, sslcert]
+
+catalog = TextOption(
+    name="catalog",
+    description=("Define the catalog to use."),
+)
+
+schema = TextOption(
+    name="schema",
+    description=("Define the schema to use."),
+)
+
+TRINO_OPTIONS = [host, port, user, password, require_auth, sslcert, schema, catalog]
