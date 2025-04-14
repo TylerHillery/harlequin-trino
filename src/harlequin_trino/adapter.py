@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import Any
 
+import google.auth
+from google.auth.transport.requests import Request
 from harlequin import (
     HarlequinAdapter,
     HarlequinConnection,
@@ -14,12 +16,7 @@ from textual_fastdatatable.backend import AutoBackendType
 
 from harlequin_trino.cli_options import TRINO_OPTIONS
 from harlequin_trino.completions import load_completions
-from trino.auth import BasicAuthentication
-from trino.dbapi import connect
-
-import google.auth
-from google.auth.transport.requests import Request
-from trino.auth import JWTAuthentication
+from trino.auth import BasicAuthentication, JWTAuthentication
 from trino.dbapi import connect
 
 
@@ -98,8 +95,8 @@ class HarlequinTrinoConnection(HarlequinConnection):
 
         elif auth == "google":
             user = modified_options.get("user")
-            credentials, _ = google.auth.default()
-            credentials.refresh(Request())
+            credentials, _ = google.auth.default()  # type: ignore
+            credentials.refresh(Request())  # type: ignore
             modified_options["auth"] = JWTAuthentication(credentials.token)
             modified_options["http_scheme"] = "https"
             modified_options["verify"] = True
@@ -183,7 +180,7 @@ class HarlequinTrinoConnection(HarlequinConnection):
 
     def _get_schemas(self, catalog: str) -> list[tuple[str]]:
         cur = self.conn.cursor()
-        cur.execute(f"SHOW SCHEMAS FROM \"{catalog}\"")
+        cur.execute(f'SHOW SCHEMAS FROM "{catalog}"')
         results: list[tuple[str]] = cur.fetchall()
         cur.close()
         return [result for result in results if result[0] != "information_schema"]

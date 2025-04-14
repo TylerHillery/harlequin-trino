@@ -15,10 +15,11 @@ packages = [
 trino = "harlequin_trino:HarlequinTrinoAdapter"
 
 [tool.poetry.dependencies]
-python = ">=3.8.1,<3.13"
+python = ">=3.10,<4.0"
 harlequin = ">=1.7,<3"
 trino = "^0.327.0"
 google-auth = "^2.38.0"
+numpy = "^2.2.4"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.1.6"
