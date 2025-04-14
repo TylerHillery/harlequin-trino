@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Features
+
+-  Added Google Auth support to the Trino adapter, thanks to [asdf8601](https://github.com/asdf8601) ([#13](https://github.com/TylerHillery/harlequin-trino/pull/13))
+
 ## [0.1.4] - 2025-01-08
 
 ### Features

@@ -11,7 +11,7 @@ from textual_fastdatatable.backend import create_backend
 from trino.dbapi import connect
 
 if sys.version_info < (3, 10):
-    from importlib_metadata import entry_points
+    from importlib_metadata import entry_points  # type: ignore
 else:
     from importlib.metadata import entry_points
 
@@ -25,7 +25,7 @@ def test_plugin_discovery() -> None:
     PLUGIN_NAME = "trino"
     eps = entry_points(group="harlequin.adapter")
     assert eps[PLUGIN_NAME]
-    adapter_cls = eps[PLUGIN_NAME].load()  # type: ignore
+    adapter_cls = eps[PLUGIN_NAME].load()
     assert issubclass(adapter_cls, HarlequinAdapter)
     assert adapter_cls == HarlequinTrinoAdapter
 
