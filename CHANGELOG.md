@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [0.1.6] - 2025-07-29
+
 ### Fixes
 
 -   Respect catalog and schema CLI options when browsing database catalogs, preventing errors from querying all catalogs ([#17](https://github.com/TylerHillery/harlequin-trino/issues/17))
@@ -48,7 +50,9 @@ All notable changes to this project will be documented in this file.
 
 -   Adds a basic Trino adapter with most common connection options.
 
-[Unreleased]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.5...HEAD
+[Unreleased]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.6...HEAD
+
+[0.1.6]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.5...0.1.6
 
 [0.1.5]: https://github.com/TylerHillery/harlequin-trino/compare/0.1.4...0.1.5
 
