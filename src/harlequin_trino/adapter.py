@@ -87,6 +87,9 @@ class HarlequinTrinoConnection(HarlequinConnection):
         schema = modified_options.pop("schema", None)
         catalog = modified_options.pop("catalog", None)
 
+        self.catalog_filter = catalog
+        self.schema_filter = schema
+
         if auth == "password":
             user = modified_options.get("user")
             modified_options["auth"] = BasicAuthentication(user, password)
@@ -121,10 +124,18 @@ class HarlequinTrinoConnection(HarlequinConnection):
         return HarlequinTrinoCursor(cur)
 
     def get_catalog(self) -> Catalog:
-        catalogs = self._get_catalogs()
+        if self.catalog_filter:
+            catalogs = [(self.catalog_filter,)]
+        else:
+            catalogs = self._get_catalogs()
+
         db_items: list[CatalogItem] = []
         for (catalog,) in catalogs:
-            schemas = self._get_schemas(catalog)
+            if self.schema_filter:
+                schemas = [(self.schema_filter,)]
+            else:
+                schemas = self._get_schemas(catalog)
+
             schema_items: list[CatalogItem] = []
             for (schema,) in schemas:
                 relations = self._get_relations(catalog, schema)
