@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Fixes
+
+-   Respect catalog and schema CLI options when browsing database catalogs, preventing errors from querying all catalogs ([#17](https://github.com/TylerHillery/harlequin-trino/issues/17))
+
 ## [0.1.5] - 2025-04-14
 
 ### Features
