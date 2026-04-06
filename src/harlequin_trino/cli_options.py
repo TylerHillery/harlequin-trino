@@ -58,7 +58,7 @@ require_auth = SelectOption(
         "if the authentication handshake is not fully completed by the server, the "
         "connection will fail."
     ),
-    choices=["password", "google", "none"],
+    choices=["password", "google", "oauth2", "none"],
 )
 
 sslcert = PathOption(
