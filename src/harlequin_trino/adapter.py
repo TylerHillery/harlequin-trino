@@ -16,7 +16,7 @@ from textual_fastdatatable.backend import AutoBackendType
 
 from harlequin_trino.cli_options import TRINO_OPTIONS
 from harlequin_trino.completions import load_completions
-from trino.auth import BasicAuthentication, JWTAuthentication
+from trino.auth import BasicAuthentication, JWTAuthentication, OAuth2Authentication
 from trino.dbapi import connect
 
 
@@ -105,6 +105,10 @@ class HarlequinTrinoConnection(HarlequinConnection):
             modified_options["verify"] = True
             modified_options["schema"] = schema
             modified_options["catalog"] = catalog
+        elif auth == "oauth2":
+            user = modified_options.get("user")
+            modified_options["auth"] = OAuth2Authentication()
+            modified_options["http_scheme"] = "https"
 
         try:
             self.conn = connect(**modified_options)
